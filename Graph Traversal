@@ -1,0 +1,60 @@
+
+https://leetcode.com/problems/number-of-islands/description/
+
+class Solution {
+    public int numIslands(char[][] grid) {
+       int count=0;
+       int m=grid.length;
+       int n=grid[0].length;
+       for(int i=0;i<m;i++) {
+        for(int j=0;j<n;j++){
+             if (grid[i][j] == '1') {
+            count++;
+            dfs(i,j,grid);
+            
+        }}}
+       return count;
+    }
+    public void dfs(int i,int j,char[][] grid){
+         int m=grid.length;
+       int n=grid[0].length;
+       
+    if (i < 0 || j < 0 || i >= m || j >= n || grid[i][j] != '1') {
+            return;
+      }
+      grid[i][j]=0;
+      dfs(i+1,j,grid); dfs(i,j+1,grid); dfs(i-1,j,grid); dfs(i,j-1,grid);
+    }
+    
+}
+
+
+
+https://leetcode.com/problems/flood-fill/description/
+
+class Solution {
+    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+
+        int col=image[sr][sc];
+        dfs(image,color,sr,sc,col);
+        return image;
+    }
+    public void dfs(int[][] grid,int color,int i,int j,int col){
+       if(col == color) return ;
+       int n=grid.length;
+       int m=grid[0].length;
+
+      if(i < 0 || j < 0 || i >= n || j >= m || grid[i][j] != col){
+          return;
+       }
+       grid[i][j]=color;
+       dfs(grid,color,i+1,j,col);
+       dfs(grid,color,i-1,j,col);
+       dfs(grid,color,i,j+1,col);
+       dfs(grid,color,i,j-1,col);
+       
+    }
+}
+
+
+
