@@ -61,3 +61,51 @@ ROTTING ORANGES
 
 https://leetcode.com/problems/rotting-oranges/
 
+class Solution {
+    public int orangesRotting(int[][] grid) {
+       int m = grid.length, n = grid[0].length;
+       
+       int[][] dir = {{1,0},{-1,0},{0,1},{0,-1}};
+       Queue<int[]> g=new LinkedList<>();
+         int fr=0;
+       for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+
+                if(grid[i][j]==2){
+                    g.offer(new int[]{i,j});
+                }
+                if(grid[i][j]==1)
+                fr++;
+
+                
+
+
+            }
+        }
+        if(fr==0){
+            return 0;
+        }
+        int time=0;
+
+        while(!g.isEmpty()){
+            int size=g.size();
+            for(int i=0;i<size;i++){
+            int[] cur=g.poll();
+           
+            for(int[] d:dir){
+             int l=cur[0]+d[0];
+             int r=cur[1]+d[1];
+             if(l>=0&&r>=0&&l<m&&r<n&&grid[l][r]==1){
+             grid[l][r]=2;
+             g.offer(new int[]{l,r});
+                fr--;
+             }
+            }
+            }
+            time++;
+        }
+
+
+    return fr==0?time-1:-1;
+ }
+}
