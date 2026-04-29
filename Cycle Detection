@@ -1,1 +1,48 @@
+REDUNDANT CONNECTION
 
+https://leetcode.com/problems/redundant-connection/description/
+
+class Solution {
+
+    public boolean dfs(int src, int target, boolean[] visited, List<List<Integer>> graph){
+        if(src == target) return true;
+
+        visited[src] = true;
+
+        for(int nei : graph.get(src)){
+            if(!visited[nei]){
+                if(dfs(nei, target, visited, graph)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public int[] findRedundantConnection(int[][] edges) {
+        int n = edges.length;
+
+        List<List<Integer>> graph = new ArrayList<>();
+        for(int i = 0; i <= n; i++){
+            graph.add(new ArrayList<>());
+        }
+
+        for(int[] e : edges){
+            int u = e[0];
+            int v = e[1];
+
+            boolean[] visited = new boolean[n + 1];
+
+            // check if already connected
+            if(dfs(u, v, visited, graph)){
+                return e; // cycle edge
+            }
+
+            // add edge
+            graph.get(u).add(v);
+            graph.get(v).add(u);
+        }
+
+        return new int[]{};
+    }
+}
