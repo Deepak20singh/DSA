@@ -34,6 +34,8 @@ Amazon ko ye bohot pasand hai.
 * Detect cycle using DFS
 * Detect cycle using BFS (Kahn nahi, parent tracking)
 
+* 684    785    261
+
 ### Directed Graph:
 
 * Course Schedule I ⭐
