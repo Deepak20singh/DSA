@@ -110,7 +110,58 @@ class Solution {
  }
 }
 
+CLONE GRAPH
 
+https://leetcode.com/problems/clone-graph/
+
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> neighbors;
+    public Node() {
+        val = 0;
+        neighbors = new ArrayList<Node>();
+    }
+    public Node(int _val) {
+        val = _val;
+        neighbors = new ArrayList<Node>();
+    }
+    public Node(int _val, ArrayList<Node> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+}
+*/
+class Solution {
+
+    Map<Node, Node> map = new HashMap<>();
+
+    public Node cloneGraph(Node node) {
+        // base case
+        if (node == null) {
+            return null;
+        }
+
+        // agar pehle se clone bana hua hai
+        if (map.containsKey(node)) {
+            return map.get(node);
+        }
+
+        // naya cloned node banao
+        Node c = new Node(node.val, new ArrayList<>());
+
+        // mapping store karo
+        map.put(node, c);
+
+        // original neighbors ko clone me jodo
+        for (Node n : node.neighbors) {
+            c.neighbors.add(cloneGraph(n));
+        }
+
+        return c;
+    }
+}
 
 SURROUNDED REGIONS
 
@@ -163,3 +214,4 @@ class Solution {
         dfs(board, i, j-1);
     }
 }
+
