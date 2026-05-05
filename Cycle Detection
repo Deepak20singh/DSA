@@ -315,3 +315,57 @@ class Solution {
         return false;
     }
 }
+
+COURSE SCHEDULE
+
+https://leetcode.com/problems/course-schedule-ii/
+
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        List<List<Integer>> li = new ArrayList<>();
+        for(int i = 0; i < numCourses; i++){
+            li.add(new ArrayList<>());
+        }
+
+        for(int[] p : prerequisites){
+            li.get(p[1]).add(p[0]);
+        }
+
+        int[] visit = new int[numCourses]; // 0 = unvisited, 1 = visiting, 2 = visited
+        List<Integer> res = new ArrayList<>();
+
+        for(int i = 0; i < numCourses; i++){
+            if(visit[i] == 0){
+                if(dfs(li, visit, i, res)){
+                    return new int[0]; // cycle मिला
+                }
+            }
+        }
+
+        // reverse result
+        int[] ans = new int[numCourses];
+        for(int i = 0; i < numCourses; i++){
+            ans[i] = res.get(numCourses - 1 - i);
+        }
+
+        return ans;
+    }
+
+    public boolean dfs(List<List<Integer>> li, int[] visit, int node, List<Integer> res){
+        if(visit[node] == 1) return true;  // cycle
+        if(visit[node] == 2) return false; // already processed
+
+        visit[node] = 1;
+
+        for(int nei : li.get(node)){
+            if(dfs(li, visit, nei, res)){
+                return true;
+            }
+        }
+
+        visit[node] = 2;
+        res.add(node); // 🔥 यही topo का core है
+
+        return false;
+    }
+}
