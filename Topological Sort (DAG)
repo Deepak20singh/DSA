@@ -62,3 +62,9 @@ class Solution {
      return result.toString();
     }
 }
+
+FIND EVENTUAL SAFE STATES
+
+https://leetcode.com/problems/find-eventual-safe-states/description/?q=Find+Eventual+Safe+States
+
+
