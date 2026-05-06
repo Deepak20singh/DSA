@@ -103,3 +103,56 @@ class Solution {
 BFS
 
 
+class Solution {
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+
+        int n = graph.length;
+        List<List<Integer>> result = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            result.add(new ArrayList<>());
+        }
+
+        int[] indegree = new int[n];
+
+        // reverse graph + outdegree
+        for (int i = 0; i < n; i++) {
+            indegree[i] = graph[i].length;
+            for (int ne : graph[i]) {
+                result.get(ne).add(i);
+            }
+        }
+
+        Queue<Integer> queue = new ArrayDeque<>();
+
+        for (int i = 0; i < n; i++) {
+            if (indegree[i] == 0) {
+                queue.offer(i);
+            }
+        }
+
+        boolean[] safe = new boolean[n];
+
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+            safe[node] = true;
+
+            for (int pre : result.get(node)) {
+                indegree[pre]--;
+
+                if (indegree[pre] == 0) {
+                    queue.offer(pre);
+                }
+            }
+        }
+
+        List<Integer> li = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            if (safe[i]) {
+                li.add(i);
+            }
+        }
+
+        return li;
+    }
+}
