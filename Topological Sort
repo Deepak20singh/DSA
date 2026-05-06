@@ -67,4 +67,39 @@ FIND EVENTUAL SAFE STATES
 
 https://leetcode.com/problems/find-eventual-safe-states/description/?q=Find+Eventual+Safe+States
 
+class Solution {
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+
+       int n = graph.length;
+        int[] vis = new int[n];
+        List<Integer> result=new ArrayList<>();
+
+        for(int i=0;i<n;i++){
+            if(dfs(i,graph,vis)){
+                result.add(i);
+            }
+
+        }
+        return result;
+    }
+    public boolean dfs(int node,int[][] graph,int[] vis){
+
+        if(vis[node]!=0){
+            return vis[node]==2;
+        }
+
+        vis[node]=1;
+        for(int ne: graph[node]){
+            if(!dfs(ne,graph,vis)){
+                return false;
+            }
+        }
+        vis[node]=2;
+        return true;
+    }
+}
+
+
+BFS
+
 
