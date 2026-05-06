@@ -104,31 +104,30 @@ class Solution {
 
 BFS
 
-
 class Solution {
     public List<Integer> eventualSafeNodes(int[][] graph) {
-
         int n = graph.length;
-        List<List<Integer>> result = new ArrayList<>();
 
+        List<List<Integer>> reverse = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            result.add(new ArrayList<>());
+            reverse.add(new ArrayList<>());
         }
 
-        int[] indegree = new int[n];
+        int[] outdegree = new int[n];
 
-        // reverse graph + outdegree
+        // build reverse graph
         for (int i = 0; i < n; i++) {
-            indegree[i] = graph[i].length;
-            for (int ne : graph[i]) {
-                result.get(ne).add(i);
+            outdegree[i] = graph[i].length;
+            for (int nei : graph[i]) {
+                reverse.get(nei).add(i);
             }
         }
 
-        Queue<Integer> queue = new ArrayDeque<>();
+        Queue<Integer> queue = new LinkedList<>();
 
+        // terminal nodes
         for (int i = 0; i < n; i++) {
-            if (indegree[i] == 0) {
+            if (outdegree[i] == 0) {
                 queue.offer(i);
             }
         }
@@ -139,22 +138,21 @@ class Solution {
             int node = queue.poll();
             safe[node] = true;
 
-            for (int pre : result.get(node)) {
-                indegree[pre]--;
-
-                if (indegree[pre] == 0) {
-                    queue.offer(pre);
+            for (int prev : reverse.get(node)) {
+                outdegree[prev]--;
+                if (outdegree[prev] == 0) {
+                    queue.offer(prev);
                 }
             }
         }
 
-        List<Integer> li = new ArrayList<>();
+        List<Integer> result = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             if (safe[i]) {
-                li.add(i);
+                result.add(i);
             }
         }
 
-        return li;
+        return result;
     }
 }
