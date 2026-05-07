@@ -1,4 +1,127 @@
 Unweighted Graph:
 
-Shortest path using BFS
+Shortest path using BFS (Binary matrix)
+
+https://leetcode.com/problems/shortest-path-in-binary-matrix/
+
+class Solution {
+    public int shortestPathBinaryMatrix(int[][] grid) {
+        Queue<int[]> q=new LinkedList<>();
+        int n=grid.length;
+        if(grid[0][0]!=0||grid[n-1][n-1]!=0){
+            return -1;
+        }
+
+        q.offer(new int[]{0,0,1});
+        grid[0][0]=1;
+       int[][] dirs = {
+            {1,0},{-1,0},{0,1},{0,-1},
+            {1,1},{-1,-1},{1,-1},{-1,1}
+        }; 
+         int newDist=0;
+        while(!q.isEmpty()){
+            int[] curr=q.poll();
+            int r=curr[0];
+            int c=curr[1];
+            int dist=curr[2];
+            if(r==n-1&&c==n-1){
+                return dist;
+            }
+            for(int[] d: dirs){
+                int nr=r+d[0];
+                int nc=c+d[1];
+                if(nr>=0&&nc>=0&&nr<n&&nc<n&&grid[nr][nc]==0){
+                     newDist=dist+1;
+                    q.offer(new int[]{nr,nc,newDist});
+                      grid[nr][nc]=1;
+                }
+
+            }
+        }
+      return -1;
+    }
+}
+
+OPEN THE LOCK
+
+https://leetcode.com/problems/open-the-lock/description/
+
+class Solution {
+
+    public int openLock(String[] deadends, String target) {
+
+        // deadends ko fast lookup ke liye set me daal diya
+        Set<String> dead = new HashSet<>(Arrays.asList(deadends));
+
+        // agar start hi deadend hai
+        if(dead.contains("0000")) {
+            return -1;
+        }
+
+        Queue<String> queue = new LinkedList<>();
+        Set<String> visited = new HashSet<>();
+
+        queue.offer("0000");
+        visited.add("0000");
+
+        int moves = 0;
+
+        // BFS
+        while(!queue.isEmpty()) {
+
+            int size = queue.size();
+
+            // ek level process karo
+            for(int i = 0; i < size; i++) {
+
+                String curr = queue.poll();
+
+                // target mil gaya
+                if(curr.equals(target)) {
+                    return moves;
+                }
+
+                // 4 wheels
+                for(int j = 0; j < 4; j++) {
+
+                    char[] arr = curr.toCharArray();
+
+                    // wheel ko +1 rotate
+                    char ch = arr[j];
+                    arr[j] = (ch == '9') ? '0' : (char)(ch + 1);
+
+                    String up = new String(arr);
+
+                    if(!dead.contains(up) && !visited.contains(up)) {
+                        queue.offer(up);
+                        visited.add(up);
+                    }
+
+                    // original restore
+                    arr = curr.toCharArray();
+
+                    // wheel ko -1 rotate
+                    ch = arr[j];
+                    arr[j] = (ch == '0') ? '9' : (char)(ch - 1);
+
+                    String down = new String(arr);
+
+                    if(!dead.contains(down) && !visited.contains(down)) {
+                        queue.offer(down);
+                        visited.add(down);
+                    }
+                }
+            }
+
+            // next level
+            moves++;
+        }
+
+        return -1;
+    }
+}
+
+WORD LADDER
+
+https://leetcode.com/problems/word-ladder/
 
