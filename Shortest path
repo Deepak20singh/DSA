@@ -224,3 +224,121 @@ class Pair {
         this.level = level;
     }
 }
+
+
+WEIGHTED GRAPH
+
+--------------------------------Dijkstra's-------------------------------
+
+import java.util.*;
+
+class Main {
+
+    public int shortestPath(
+            int V,
+            ArrayList<ArrayList<ArrayList<Integer>>> adj,
+            int source,
+            int destination
+    ) {
+
+        PriorityQueue<Pair> p =
+                new PriorityQueue<>((a, b) -> a.dist - b.dist);
+
+        int[] dist = new int[V];
+
+        Arrays.fill(dist, Integer.MAX_VALUE);
+
+        dist[source] = 0;
+
+        p.offer(new Pair(source, 0));
+
+        while (!p.isEmpty()) {
+
+            Pair pr = p.poll();
+
+            int n = pr.node;
+
+            int v = pr.dist;
+
+            // Destination reached
+            if (n == destination) {
+                return v;
+            }
+
+            for (ArrayList<Integer> a : adj.get(n)) {
+
+                int nn = a.get(0);
+
+                int nv = a.get(1);
+
+                // Relaxation
+                if ((v + nv) < dist[nn]) {
+
+                    dist[nn] = v + nv;
+
+                    p.offer(new Pair(nn, dist[nn]));
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    public static void main(String[] args) {
+
+        Main obj = new Main();
+
+        int V = 4;
+
+        ArrayList<ArrayList<ArrayList<Integer>>> adj =
+                new ArrayList<>();
+
+        // Create empty lists
+        for (int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        // 0 -> 1 (weight 1)
+        adj.get(0).add(
+                new ArrayList<>(Arrays.asList(1, 1))
+        );
+
+        // 0 -> 2 (weight 4)
+        adj.get(0).add(
+                new ArrayList<>(Arrays.asList(2, 4))
+        );
+
+        // 1 -> 3 (weight 2)
+        adj.get(1).add(
+                new ArrayList<>(Arrays.asList(3, 2))
+        );
+
+        // 2 -> 3 (weight 1)
+        adj.get(2).add(
+                new ArrayList<>(Arrays.asList(3, 1))
+        );
+
+        int source = 0;
+
+        int destination = 2;
+
+        int ans =
+                obj.shortestPath(V, adj, source, destination);
+
+        System.out.println("Shortest Distance = " + ans);
+    }
+}
+
+class Pair {
+
+    int node;
+
+    int dist;
+
+    public Pair(int node, int dist) {
+
+        this.node = node;
+
+        this.dist = dist;
+    }
+}
