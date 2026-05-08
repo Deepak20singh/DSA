@@ -342,3 +342,96 @@ class Pair {
         this.dist = dist;
     }
 }
+------------------------------
+        Weighted GRAPH
+------------------------------
+
+---------------------------NETWORK DELAY TIME----------------------------
+
+https://leetcode.com/problems/network-delay-time/
+
+import java.util.*;
+
+class Solution {
+
+    class Pair {
+        int node;
+        int dist;
+
+        Pair(int node, int dist) {
+            this.node = node;
+            this.dist = dist;
+        }
+    }
+
+    public int networkDelayTime(int[][] times, int n, int k) {
+
+        // graph
+        ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
+
+        for (int i = 0; i <= n; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        // build graph
+        for (int[] edge : times) {
+
+            int u = edge[0];
+            int v = edge[1];
+            int w = edge[2];
+
+            adj.get(u).add(new Pair(v, w));
+        }
+
+        // shortest distance array
+        int[] dist = new int[n + 1];
+
+        Arrays.fill(dist, Integer.MAX_VALUE);
+
+        // min heap
+        PriorityQueue<Pair> pq =
+                new PriorityQueue<>((a, b) -> a.dist - b.dist);
+
+        // source
+        dist[k] = 0;
+
+        pq.offer(new Pair(k, 0));
+
+        while (!pq.isEmpty()) {
+
+            Pair curr = pq.poll();
+
+            int node = curr.node;
+            int currDist = curr.dist;
+
+            for (Pair neighbour : adj.get(node)) {
+
+                int adjNode = neighbour.node;
+                int edgeWeight = neighbour.dist;
+
+                // relaxation
+                if (currDist + edgeWeight < dist[adjNode]) {
+
+                    dist[adjNode] = currDist + edgeWeight;
+
+                    pq.offer(new Pair(adjNode, dist[adjNode]));
+                }
+            }
+        }
+
+        int ans = 0;
+
+        // find maximum time
+        for (int i = 1; i <= n; i++) {
+
+            // unreachable node
+            if (dist[i] == Integer.MAX_VALUE) {
+                return -1;
+            }
+
+            ans = Math.max(ans, dist[i]);
+        }
+
+        return ans;
+    }
+}
