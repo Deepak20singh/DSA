@@ -1,3 +1,5 @@
+Prim ek node se start karke tree ko grow karta hai, jabki Kruskal poore graph ki sabse sasti edges globally choose karta hai.
+
 import java.util.*;
 
 class Solution {
