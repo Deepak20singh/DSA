@@ -1,0 +1,75 @@
+import java.util.*;
+
+class Solution {
+    public int minimumCost(int n, int[][] connections) {
+
+        // Step 1: Build adjacency list
+        List<List<int[]>> adj = new ArrayList<>();
+
+        // 1-based indexing, so create n + 1 lists
+        for (int i = 0; i <= n; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        // Each connection = [city1, city2, cost]
+        // Undirected graph, so add both directions
+        for (int[] edge : connections) {
+            int city1 = edge[0];
+            int city2 = edge[1];
+            int cost = edge[2];
+
+            adj.get(city1).add(new int[]{city2, cost});
+            adj.get(city2).add(new int[]{city1, cost});
+        }
+
+        // Step 2: Min Heap based on cost
+        // Format stored in heap: [city, cost]
+        PriorityQueue<int[]> pq =
+                new PriorityQueue<>((a, b) -> a[1] - b[1]);
+
+        // Step 3: Track visited cities
+        boolean[] visited = new boolean[n + 1];
+
+        // Step 4: Start from city 1 with cost 0
+        pq.offer(new int[]{1, 0});
+
+        int totalCost = 0;
+        int citiesVisited = 0;
+
+        // Step 5: Prim's Algorithm
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+
+            int city = curr[0];
+            int cost = curr[1];
+
+            // Skip if city already included in MST
+            if (visited[city]) {
+                continue;
+            }
+
+            // Include this city in MST
+            visited[city] = true;
+            totalCost += cost;
+            citiesVisited++;
+
+            // Add all unvisited neighbors to heap
+            for (int[] neighbor : adj.get(city)) {
+                int nextCity = neighbor[0];
+                int nextCost = neighbor[1];
+
+                if (!visited[nextCity]) {
+                    pq.offer(new int[]{nextCity, nextCost});
+                }
+            }
+        }
+
+        // If all cities are connected, return total cost
+        if (citiesVisited == n) {
+            return totalCost;
+        }
+
+        // Graph is disconnected
+        return -1;
+    }
+}
