@@ -1,4 +1,4 @@
-----------------------KRUSKAL ALGO-----------------------
+---------------------------------------------------------KRUSKAL ALGO-------------------------------------------------------
 
 isco use tab Kiya Jata Hai Jab Hame Src Se leki Destination tk pauchna ho wo bhi minimum cost pe
 
@@ -76,8 +76,67 @@ class Main {
 }
 
 
+---------------------------------------------------------UNION FIND-------------------------------------------------------------
+import java.util.*;
 
--------------------------PRIMS ALGO---------------------------
+class Solution {
+
+    int[] parent;
+
+    // FIND
+    int find(int x) {
+
+        if(parent[x] == x)
+            return x;
+
+        return parent[x] = find(parent[x]);
+    }
+
+    // UNION
+    void union(int u, int v) {
+
+        int pu = find(u);
+        int pv = find(v);
+
+        if(pu != pv) {
+            parent[pv] = pu;
+        }
+    }
+
+    public int kruskal(int V, int[][] connections) {
+
+        // sort by weight
+        Arrays.sort(connections,
+                (a,b) -> a[2] - b[2]);
+
+        parent = new int[V];
+
+        for(int i = 0; i < V; i++) {
+            parent[i] = i;
+        }
+
+        int mstWeight = 0;
+
+        for(int[] edge : connections) {
+
+            int u = edge[0];
+            int v = edge[1];
+            int wt = edge[2];
+
+            // no cycle
+            if(find(u) != find(v)) {
+
+                union(u,v);
+
+                mstWeight += wt;
+            }
+        }
+
+        return mstWeight;
+    }
+}
+
+--------------------------------------------------------------PRIMS ALGO-----------------------------------------------------
 
 Prim ek node se start karke tree ko grow karta hai, jabki Kruskal poore graph ki sabse sasti edges globally choose karta hai.
 
