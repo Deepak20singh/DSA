@@ -127,5 +127,89 @@ class Solution {
 
 union find
 
+class Solution {
+    int[] parent;
+    public int find(int x){
+        if(parent[x]==x){
+            return x;
+        }
+        return parent[x]=find(parent[x]);
+    }
+    public void union(int u,int v){
+        int pu=find(u);
+        int pv=find(v);
 
+        if(pu!=pv){
+            parent[pu]=pv;
+        }
+    }
+    public int[] findRedundantConnection(int[][] edges) {
+
+    int n=edges.length;
+    parent=new int[n+1];
+
+    for(int i=1;i<=n;i++){
+        parent[i]=i;
+    }
+
+    for(int[] e:edges){
+     int e1=e[0];
+     int e2=e[1];
+
+     if(find(e1)==find(e2)){
+       return e;
+     }
+      union(e1,e2);
+    }
+    return new int[0];
+    }
+}
+
+with rank
+
+class Solution {
+    int[] parent;
+    int[] rank;
+    public int find(int x){
+        if(parent[x]==x){
+            return x;
+        }
+        return parent[x]=find(parent[x]);
+    }
+    public void union(int u,int v){
+        int pu=find(u);
+        int pv=find(v);
+
+        if(rank[pu]>rank[pv]){
+            parent[pv]=pu;
+        }else if(rank[pv]>rank[pu]){
+            parent[pu]=pv;
+        }else{
+            parent[pv]=pu;
+            rank[pu]++;
+        }
+    }
+    public int[] findRedundantConnection(int[][] edges) {
+
+    int n=edges.length;
+    parent=new int[n+1];
+    rank=new int[n+1];
+
+    for(int i=1;i<=n;i++){
+        parent[i]=i;
+        rank[i]=0;
+    }
+
+    for(int[] e:edges){
+     int e1=e[0];
+     int e2=e[1];
+
+     if(find(e1)==find(e2)){
+       return e;
+     }
+      union(e1,e2);
+    }
+    return new int[0];
+    }
+}
 
