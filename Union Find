@@ -213,6 +213,71 @@ class Solution {
     }
 }
 
+--------------------------------https://leetcode.com/problems/accounts-merge/----------------------------------------------
+
+class Solution {
+    public List<List<String>> accountsMerge(List<List<String>> accounts) {
+    Map<String,String> par=new HashMap<>();
+    
+    Map<String,String> emailToName=new HashMap<>();
+
+    for(List<String> root:accounts){
+        String name=root.get(0);
+        String email=root.get(1);
+
+        par.putIfAbsent(email,email);
+        emailToName.put(email,name);
+
+        for(int i=2;i<root.size();i++){
+            String mail=root.get(i);
+            par.putIfAbsent(mail,mail);
+            emailToName.put(mail,name);
+
+            union(email,mail,par);
+        }
+    }
+     
+     Map<String,List<String>> groups=new HashMap<>();
+
+     for(String email:par.keySet()){
+       String root=find(email,par);
+       groups.putIfAbsent(root,new ArrayList<>());
+       groups.get(root).add(email);
+        
+     }
+     List<List<String>> result=new ArrayList<>();
+
+     for(String root:groups.keySet()){
+        List<String> emails=groups.get(root);
+        Collections.sort(emails);
+        String name=emailToName.get(root);
+         List<String> merge=new ArrayList<>();
+         merge.add(name);
+         merge.addAll(emails);
+      
+         result.add(merge);
+     }
+return result;
+
+}
+public String find(String email,Map<String,String> par){
+    if(par.get(email).equals(email)){
+        return email;
+    }
+    String root=find(par.get(email),par);
+  par.put(email,root);
+  return root;
+}
+public void union(String e1,String e2,Map<String,String> par ){
+    String r1=find(e1,par);
+    String r2=find(e2,par);
+
+    if(!r1.equals(r2)){
+     par.put(r2,r1);
+    }
+}
+}
+
 -----------------------------------NUMBER OF OPERATIONS TO MAKE NETWORK CONNECTED----------------------------
 
 https://leetcode.com/problems/number-of-operations-to-make-network-connected/
@@ -259,3 +324,47 @@ class Solution {
         return s1.size()-1;
     }
 }
+
+
+class Solution {
+   
+    public int makeConnected(int n, int[][] connections) {
+
+        if(connections.length<n-1){
+            return -1;
+        }
+        List<List<Integer>> l1=new ArrayList<>();
+        for(int i=0;i<n;i++){
+            l1.add(new ArrayList<>());
+        }
+        for(int[] e:connections){
+           int u=e[0];
+           int v=e[1];
+
+           l1.get(u).add(v);
+           l1.get(v).add(u);
+        }
+
+        boolean[] visited=new boolean[n];
+        int component=0;
+
+        for(int i=0;i<n;i++){
+            if(!visited[i]){
+                component++;
+                dfs(i,l1,visited);
+            }
+        }
+        return component-1;
+    }
+    public void dfs(int node, List<List<Integer>> l1, boolean[] visited ){
+        visited[node]=true;
+
+        for(int nei:l1.get(node)){
+           if(!visited[nei]){
+            dfs(nei,l1,visited);
+           }
+        }
+    }
+}
+
+
