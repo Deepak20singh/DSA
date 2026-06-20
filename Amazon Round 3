@@ -67,3 +67,55 @@ class Main {
         System.out.println(find(arr, k));
     }
 }
+
+
+with pair me
+
+import java.util.*;
+
+class Main {
+
+    public static void printSubarrays(int[] arr, int k) {
+
+        Map<Integer, List<Integer>> map = new HashMap<>();
+
+        // Prefix sum 0 ko index -1 par maan lo
+        map.put(0, new ArrayList<>());
+        map.get(0).add(-1);
+
+        int sum = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+
+            sum += arr[i];
+
+            int need = sum - k;
+
+            if (map.containsKey(need)) {
+
+                for (int start : map.get(need)) {
+
+                    System.out.print("Subarray: ");
+
+                    for (int j = start + 1; j <= i; j++) {
+                        System.out.print(arr[j] + " ");
+                    }
+
+                    System.out.println();
+                }
+            }
+
+            map.putIfAbsent(sum, new ArrayList<>());
+            map.get(sum).add(i);
+        }
+    }
+
+    public static void main(String[] args) {
+
+        int[] arr = {1, -1, 1, -1};
+        int k = 0;
+
+        printSubarrays(arr, k);
+    }
+}
+
