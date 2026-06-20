@@ -1,9 +1,64 @@
+climbing-stairs
+
+https://leetcode.com/problems/climbing-stairs/
 
 
+class Solution {
+
+    public int climbStairs(int n) {
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, -1);
+
+        return ans(dp, n);
+    }
+
+    public int ans(int[] dp, int s) {
+
+        if (s == 0) {
+            return 1;
+        }
+
+        if (s < 0) {
+            return 0;
+        }
+
+        if (dp[s] != -1) {
+            return dp[s];
+        }
+
+        return dp[s] = ans(dp, s - 1) + ans(dp, s - 2);
+    }
+}
 
 
+min-cost-climbing-stairs
+
+https://leetcode.com/problems/min-cost-climbing-stairs/
 
 
+class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+        int[] dp=new int[cost.length];
+        Arrays.fill(dp,-1);
+
+        return Math.min(ans(cost,dp,0),ans(cost,dp,1));
+    }
+    public int ans(int[] nums,int[] dp,int s){
+        
+  if(s>=nums.length){
+            return 0;
+        }
+        if(dp[s]!=-1){
+            return dp[s];
+        }
+        
+        int pick=nums[s]+ans(nums,dp,s+1);
+        int nPick=nums[s]+ans(nums,dp,s+2);
+        return dp[s]=Math.min(pick,nPick);
+    }
+}
+
+house-robber
 
 https://leetcode.com/problems/house-robber/
 
