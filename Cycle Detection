@@ -33,6 +33,8 @@ class Main {
             return false;
         }
 
+        // par[pv]=pu;
+
         if (rank[pu] < rank[pv]) {
             par[pu] = pv;
         } else if (rank[pu] > rank[pv]) {
